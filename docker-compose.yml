@@ -1,14 +1,53 @@
 version: "3.9"
+
+volumes:
+  postgres_data:
+
 services:
-  postgres:
-    image: postgres:latest
+  library_db:
+    image: postgres:14.5
+
     environment:
-      POSTGRES_DB: "teacher"
-      POSTGRES_USER: "teacher"
-      POSTGRES_PASSWORD: "teacher"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
+      POSTGRES_DB: romanov_204
+      POSTGRES_USER: romanov_204
+      POSTGRES_PASSWORD: romanov_204
+      PGDATA: /var/lib/postgresql/data/pgdata-library
+
     volumes:
-      - docker/db/scripts:/docker-entrypoint-initdb.d
-      - dz:/var/lib/postgresql/data
+      - ./docker/db/scripts/library.sql:/docker-entrypoint-initdb.d/library.sql
+      - ./dz:/var/lib/postgresql/data
+
     ports:
       - "5432:5432"
+
+  stations_db:
+    image: postgres:14.5
+
+    environment:
+      POSTGRES_DB: romanov_204
+      POSTGRES_USER: romanov_204
+      POSTGRES_PASSWORD: romanov_204
+      PGDATA: /var/lib/postgresql/data/pgdata-stations
+
+    volumes:
+      - ./docker/db/scripts/stations.sql:/docker-entrypoint-initdb.d/stations.sql
+      - ./dz:/var/lib/postgresql/data
+
+    ports:
+      - "5433:5432"
+
+  hospital_db:
+    image: postgres:14.5
+
+    environment:
+      POSTGRES_DB: romanov_204
+      POSTGRES_USER: romanov_204
+      POSTGRES_PASSWORD: romanov_204
+      PGDATA: /var/lib/postgresql/data/pgdata-hospital
+
+    volumes:
+      - ./docker/db/scripts/hospital.sql:/docker-entrypoint-initdb.d/hospital.sql
+      - ./dz:/var/lib/postgresql/data
+
+    ports:
+      - "5434:5432"
